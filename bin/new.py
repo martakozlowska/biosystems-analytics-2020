@@ -6,12 +6,6 @@ Purpose: Python program to write a Python program
 """
 
 import argparse
-import os
-import re
-import subprocess
-import sys
-from datetime import date
-from pathlib import Path
 
 
 # --------------------------------------------------
