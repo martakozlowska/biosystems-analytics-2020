@@ -25,8 +25,8 @@ def get_args():
 
     parser.add_argument('-s',
                         '--sep',
-                        help='A separator',
-                        default=', ')
+                        default=', ',
+                        help='A separator')
 
     return parser.parse_args()
 
