@@ -44,7 +44,7 @@ def main():
     elif len(items) == 2:
         print(f'You are bringing {" and ".join(items)}.')
     else:
-        print(f'You are bringing {", ".join(items[:-2])}, {items[-2]}, and {items[-1]}.')
+        print(f'You are bringing {", ".join(items[:-1])}, and {items[-1]}.')
 
 # --------------------------------------------------
 if __name__ == '__main__':
