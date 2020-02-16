@@ -20,7 +20,7 @@ def get_args():
 
     parser.add_argument('words',
                         metavar='str',
-                        nargs='+',
+                        nargs='*',
                         help='Input words to order')
     parser.add_argument('-r',
                         '--reverse',
@@ -37,8 +37,7 @@ def main():
     args = get_args()
     words = args.words
     alphabet = words.sort()
-    ind = '' \
-          '1:'
+    ind = '\nindex'
 
     print(f'{ind.join(alphabet)}')
 
