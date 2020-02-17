@@ -32,20 +32,18 @@ def main():
 
     args = get_args()
     days = args.days
-    week = {'Monday': 'On Mondays I never go to work',
-            'Tuesday': 'On Tuesdays I stay at home',
-            'Wednesday': 'On Wednesdays I never feel inclined',
-            'Thursday': 'On Thursdays, it’s a holiday',
-            'Friday': 'And Fridays I detest',
-            'Saturday': 'Oh, it’s much too late on a Saturday',
-            'Sunday': 'And Sunday is the day of rest'}
+    week = {
+                    'Monday': 'On Mondays I never go to work',
+                    'Tuesday': 'On Tuesdays I stay at home',
+                    'Wednesday': 'On Wednesdays I never feel inclined',
+                    'Thursday': 'On Thursdays, it’s a holiday',
+                    'Friday': 'And Fridays I detest',
+                    'Saturday': 'Oh, it’s much too late on a Saturday',
+                    'Sunday': 'And Sunday is the day of rest'
+            }
 
     for days in week:
-        if days in week:
-            print(week.get(days))
-        else:
-            print(f"Can't find {days}")
-
+        print(week.get(days) if days in week else f"Can't find {days}")
 
 # --------------------------------------------------
 if __name__ == '__main__':
