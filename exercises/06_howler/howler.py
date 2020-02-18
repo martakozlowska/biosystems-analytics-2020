@@ -23,8 +23,8 @@ def get_args():
                         help='Input text or file')
 
     parser.add_argument('-o',
-                        '--out',
-                        help='A named string argument',
+                        '--outfile',
+                        help='Output file name',
                         metavar='str',
                         type=str,
                         default='')
@@ -41,9 +41,11 @@ def main():
     """Howler time"""
 
     args = get_args()
-
-
-
+    out_fh = open(args.outfile, 'wt') if args.outfile else sys.stdout
+    #out_fh.write(args.text.upper() + '\n')
+    print(args.text.upper(), file=out_fh, end='')
+    print('OHNOES', file=sys.stderr)
+    out_fh.close()
 
 # --------------------------------------------------
 if __name__ == '__main__':
