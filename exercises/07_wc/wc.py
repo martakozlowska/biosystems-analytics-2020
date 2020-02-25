@@ -20,16 +20,10 @@ def get_args():
 
     parser.add_argument('file',
                         metavar='FILE',
-                        nargs='+',
+                        nargs='*',
                         type=argparse.FileType('r'),
+                        default=[sys.stdin],
                         help='input file(s)')
-
-    parser.add_argument('-i',
-                        '--int',
-                        help='A named integer argument',
-                        metavar='int',
-                        type=int,
-                        default=0)
 
     return parser.parse_args()
 
