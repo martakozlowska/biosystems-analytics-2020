@@ -18,18 +18,18 @@ def get_args():
         description='Head',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('file',
-                        help='Input file',
-                        metavar='FILE',
-                        type=argparse.FileType('r'),
-                        default=[sys.stdin])
-
     parser.add_argument('-n',
                         '--num',
                         help='Number of lines (default: 10)',
                         type=int,
                         nargs='+',
                         default='10')
+
+    parser.add_argument('file',
+                        help='Input file',
+                        metavar='FILE',
+                        type=argparse.FileType('r'),
+                        default=[sys.stdin])
 
     return parser.parse_args()
 
