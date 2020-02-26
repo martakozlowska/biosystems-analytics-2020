@@ -22,7 +22,6 @@ def get_args():
                         '--num',
                         help='Number of lines (default: 10)',
                         type=int,
-                        nargs='+',
                         default='10')
 
     parser.add_argument('file',
@@ -31,7 +30,11 @@ def get_args():
                         type=argparse.FileType('r'),
                         default=[sys.stdin])
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not args.num > 0:
+        parser.error(f'--num "{args.num}" must be greater than 0')
+
+    return args
 
 
 # --------------------------------------------------
@@ -40,10 +43,16 @@ def main():
 
     args = get_args()
 
-    for fh in args.file:
-        num_lines = 0
-        for line in fh:
-            num_lines += 1
+    fh = open(args.file)
+    text = fh.readline(args.num)
+    print(text)
+
+
+
+    #for fh in args.file:
+        #num_lines = 0
+        #for line in fh:
+            #num_lines += 1
 
 
 
