@@ -19,14 +19,16 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('file',
-                        help='A readable file',
+                        help='Input file',
                         metavar='FILE',
                         type=argparse.FileType('r'),
-                        default=None)
+                        default=[sys.stdin])
+
     parser.add_argument('-n',
                         '--num',
-                        help='Number of lines to show',
+                        help='Number of lines (default: 10)',
                         type=int,
+                        nargs='+',
                         default='10')
 
     return parser.parse_args()
@@ -39,6 +41,9 @@ def main():
     args = get_args()
 
     for fh in args.file:
+        num_lines = 0
+        for line in fh:
+            num_lines += 1
 
 
 
