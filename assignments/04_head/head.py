@@ -39,37 +39,18 @@ def get_args():
 
 # --------------------------------------------------
 def main():
-    """head"""
+    """head function"""
 
     args = get_args()
-
-    #fh = open(arg.file)
-        #count = 0
-        #num_lines = range (0, args.num)
-        #for line in fh:
-            #line = line.strip()
-            #if count in num_lines:
-                #print(line)
-            #else:
-                #pass
-
-
-    #N = args.num
-    #for i in range(N):
-        #line = args.file.strip()
-        #print(line)
 
     with open(args.file) as fh:
         num_lines = 0
 
         for line in fh:
             line = line.strip()
-            if num_lines in range (0, args.num):
+            if num_lines in range(0, args.num):
                 print(line)
             num_lines += 1
-
-    #if int(num_lines) < int(args.num):
-        #print(fh.readline())
 
 
 # --------------------------------------------------
