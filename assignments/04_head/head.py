@@ -20,11 +20,12 @@ def get_args():
 
     parser.add_argument('file',
                         help='Input file',
+                        #type=argparse.FileType('r'),
                         metavar='FILE')
 
     parser.add_argument('-n',
                         '--num',
-                        help='Number of lines (default: 10)',
+                        help='Number of lines',
                         type=int,
                         default=10)
 
