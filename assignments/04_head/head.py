@@ -22,7 +22,7 @@ def get_args():
                         '--num',
                         help='Number of lines (default: 10)',
                         type=int,
-                        default='10')
+                        default=10)
 
     parser.add_argument('file',
                         help='Input file',
@@ -43,18 +43,16 @@ def main():
 
     args = get_args()
 
-    fh = open(args.file)
-    text = fh.readline(args.num)
-    print(text)
+    for fh in args.file:
+        num_lines = 0
+        for line in fh:
+            num_lines += 1
+            print(fh.readline())
+        #for num_lines in range(0, args.num):
+            #print(line, end='')
 
-
-
-    #for fh in args.file:
-        #num_lines = 0
-        #for line in fh:
-            #num_lines += 1
-
-
+    #if int(num_lines) < int(args.num):
+        #print(fh.readline())
 
 
 # --------------------------------------------------
