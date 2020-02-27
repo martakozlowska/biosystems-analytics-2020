@@ -18,17 +18,17 @@ def get_args():
         description='Head',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+    parser.add_argument('file',
+                        help='Input file',
+                        metavar='FILE')
+
     parser.add_argument('-n',
                         '--num',
                         help='Number of lines (default: 10)',
                         type=int,
                         default=10)
 
-    parser.add_argument('file',
-                        help='Input file',
-                        metavar='FILE',
-                        type=argparse.FileType('r'),
-                        default=[sys.stdin])
+
 
     args = parser.parse_args()
     if not args.num > 0:
@@ -39,17 +39,34 @@ def get_args():
 
 # --------------------------------------------------
 def main():
-    """head time"""
+    """head"""
 
     args = get_args()
 
-    for fh in args.file:
+    #fh = open(arg.file)
+        #count = 0
+        #num_lines = range (0, args.num)
+        #for line in fh:
+            #line = line.strip()
+            #if count in num_lines:
+                #print(line)
+            #else:
+                #pass
+
+
+    #N = args.num
+    #for i in range(N):
+        #line = args.file.strip()
+        #print(line)
+
+    with open(args.file) as fh:
         num_lines = 0
+
         for line in fh:
+            line = line.strip()
+            if num_lines in range (0, args.num):
+                print(line)
             num_lines += 1
-            print(fh.readline())
-        #for num_lines in range(0, args.num):
-            #print(line, end='')
 
     #if int(num_lines) < int(args.num):
         #print(fh.readline())
