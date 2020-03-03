@@ -39,10 +39,6 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    #lookup = {}
-
-    #for line in args.file:
-        #lookup[line[0]] = line.strip()
 
     lookup = { line[0]: line.strip() for line in args.file}
 
