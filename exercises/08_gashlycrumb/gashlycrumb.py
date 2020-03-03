@@ -8,6 +8,7 @@ Purpose: Gashlycrumb
 import argparse
 import os
 import sys
+from pprint import pprint
 
 
 # --------------------------------------------------
@@ -18,9 +19,9 @@ def get_args():
         description='Crumb',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('letters',
+    parser.add_argument('letter',
                         metavar='str',
-                        nargs='+'
+                        nargs='+',
                         help='Letters to lookup')
 
     parser.add_argument('-f',
@@ -38,8 +39,13 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    print(f'letters = {args.letters}')
-    print(f'text = {}')
+    lookup = {}
+
+    for line in args.file:
+        lookup[line[0]] = line.strip()
+
+    for letter in args.letter:
+        print(lookup.get(letter.upper(), f'I do not know "{letter}".'))
 
 
 # --------------------------------------------------
