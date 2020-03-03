@@ -39,10 +39,12 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    lookup = {}
+    #lookup = {}
 
-    for line in args.file:
-        lookup[line[0]] = line.strip()
+    #for line in args.file:
+        #lookup[line[0]] = line.strip()
+
+    lookup = { line[0]: line.strip() for line in args.file}
 
     for letter in args.letter:
         print(lookup.get(letter.upper(), f'I do not know "{letter}".'))
