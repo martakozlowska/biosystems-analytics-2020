@@ -40,33 +40,25 @@ def main():
     args = get_args()
 
     for line in args.file:
-        line = line.strip()
-        word1, word2 = line.split()
+        word1, word2 = line.rstrip().split()
 
         if len(word1) == len(word2):
             diff = 0
             for c1, c2 in zip(word1, word2):
-                if c1 == c2:
-                    pass
-                else:
+                if c1 != c2:
                     diff += 1
         else: #words not the same length
             diff = abs(len(word1) - len(word2))
             dist = 0
             for c1, c2 in zip(word1, word2):
-                if c1 == c2:
-                    pass
-                else:
+                if c1 != c2:
                     dist += 1
             diff += dist
 
-        if args.min >= 0:
-            if diff >= args.min:
-                print(f'{diff:8}:{word1:20}{word2:20}')
-            else:
-                None
+        if diff >= args.min:
+            print(f'{diff:8}:{word1:20}{word2:20}')
         else:
-            pass
+            None
 
 # --------------------------------------------------
 if __name__ == '__main__':
