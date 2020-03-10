@@ -28,6 +28,7 @@ def get_args():
                         '--codons',
                         help='A file with codon translations',
                         metavar='FILE',
+                        nargs='+',
                         type=argparse.FileType('r'),
                         default=None)
 
@@ -54,7 +55,7 @@ def main():
     #print(seq_code)
 
     for codon in seq_code:
-        print(lookup.get(codon, f'-'), end = '')
+        print(lookup.get(codon, f'-'), end='')
 
     print(f'')
 
