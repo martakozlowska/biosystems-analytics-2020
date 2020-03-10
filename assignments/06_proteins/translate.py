@@ -8,6 +8,7 @@ Purpose: Protein translate
 import argparse
 import os
 import sys
+from pprint import pprint
 
 
 # --------------------------------------------------
@@ -45,8 +46,32 @@ def main():
 
     args = get_args()
 
-    print(args.DNA)
+    lookup = {line[:3]: line.strip()[4:] for line in args.codons}
+    #pprint(lookup)
 
+    seq = args.DNA.upper()
+    seq_code = [seq[i:i+3] for i in range(0, len(seq), 3)]
+    #print(seq_code)
+
+    for codon in seq_code:
+        print(lookup.get(codon, f'-'), end = '')
+
+    print(f'')
+
+"""
+print(lookup.get(letter.upper(), f'I do not know "{letter}".'))
+    for codon in args.DNA:
+        print(lookup.get(codon[:2], f'-'), end='')
+
+    out_fh = open(args.outfile, 'wt') #if args.outfile else sys.stdout
+
+
+    print(args.text.upper(), file=out_fh, end='')
+    print('OHNOES', file=sys.stderr)
+    out_fh.close()
+
+    print(f'Output written to {out_fh}')
+"""
 
 # --------------------------------------------------
 if __name__ == '__main__':
