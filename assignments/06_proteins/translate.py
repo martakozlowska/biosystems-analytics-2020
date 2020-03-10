@@ -28,7 +28,6 @@ def get_args():
                         '--codons',
                         help='A file with codon translations',
                         metavar='FILE',
-                        nargs='+',
                         type=argparse.FileType('r'),
                         default=None)
 
@@ -54,10 +53,13 @@ def main():
     seq_code = [seq[i:i+3] for i in range(0, len(seq), 3)]
     #print(seq_code)
 
-    for codon in seq_code:
-        print(lookup.get(codon, f'-'), end='')
+    for cdn in seq_code:
+        ans = lookup.get(cdn, f'-')
+    return ans
+    print(ans)
 
-    print(f'')
+    out_fh = open(args.outfile, 'w')
+    out_fh.write(ans)
 
 """
 print(lookup.get(letter.upper(), f'I do not know "{letter}".'))
