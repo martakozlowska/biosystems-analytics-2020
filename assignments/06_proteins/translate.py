@@ -6,9 +6,6 @@ Purpose: Protein translate
 """
 
 import argparse
-import os
-import sys
-from pprint import pprint
 
 
 # --------------------------------------------------
@@ -29,7 +26,8 @@ def get_args():
                         help='A file with codon translations',
                         metavar='FILE',
                         type=argparse.FileType('r'),
-                        default=None)
+                        default=None,
+                        required=True)
 
     parser.add_argument('-o',
                         '--outfile',
@@ -47,34 +45,18 @@ def main():
     args = get_args()
 
     lookup = {line[:3]: line.strip()[4:] for line in args.codons}
-    #pprint(lookup)
 
-    seq = args.DNA.upper()
-    seq_code = [seq[i:i+3] for i in range(0, len(seq), 3)]
-    #print(seq_code)
+    #seq = args.DNA.upper()
+    seq_code = [args.DNA.upper()[i:i+3] for i in range(0, len(args.DNA), 3)]
 
+    ans = ''
     for cdn in seq_code:
-        ans = lookup.get(cdn, f'-')
-    return ans
-    print(ans)
+        ans += lookup.get(cdn, f'-')
 
-    out_fh = open(args.outfile, 'w')
-    out_fh.write(ans)
-
-"""
-print(lookup.get(letter.upper(), f'I do not know "{letter}".'))
-    for codon in args.DNA:
-        print(lookup.get(codon[:2], f'-'), end='')
-
-    out_fh = open(args.outfile, 'wt') #if args.outfile else sys.stdout
-
-
-    print(args.text.upper(), file=out_fh, end='')
-    print('OHNOES', file=sys.stderr)
+    out_fh = open(args.outfile, 'wt')
+    out_fh.write(ans + '\n')
+    print(f'Output written to "{args.outfile}".')
     out_fh.close()
-
-    print(f'Output written to {out_fh}')
-"""
 
 # --------------------------------------------------
 if __name__ == '__main__':
