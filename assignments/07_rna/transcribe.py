@@ -50,7 +50,7 @@ def main():
         out_file = os.path.join(outdir, os.path.basename(fh.name))
         out_fh = open(out_file, 'wt')
         num_file += 1
-        rna = []
+        RNA = []
         for line in fh:
             num_seq += 1
             for char in line:
@@ -61,10 +61,10 @@ def main():
                 else:
                     RNA.append(char)
 
+        out_fh.write(''.join(RNA))
         numseq_total += num_seq
         seq_s = 'sequence' if num_seq == 1 else 'sequences'
         file_s = 'file' if num_file == 1 else 'files'
-        out_fh.write(''.join(RNA))
         print(f'Done, wrote {numseq_total} {seq_s} in {num_file} {file_s} to directory "{outdir}".')
         out_fh.close()
 
