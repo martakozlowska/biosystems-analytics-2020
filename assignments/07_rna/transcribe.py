@@ -50,7 +50,7 @@ def main():
         out_file = os.path.join(outdir, os.path.basename(fh.name))
         out_fh = open(out_file, 'wt')
         num_file += 1
-        RNA = []
+        rna = []
         for line in fh:
             num_seq += 1
             for char in line:
