@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
 Author : Marta Kozlowska
-Date   : 20.03.05
-Purpose: Protein translate
+Date   : 20.03.23
+Purpose: DNA RNA transcribe
 """
 
 import argparse
+import os
 
 
 # --------------------------------------------------
@@ -13,50 +14,59 @@ def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Protein translate time',
+        description='Transcription time',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('DNA',
-                        metavar='str',
-                        type=str,
-                        help='DNA/RNA sequence')
-
-    parser.add_argument('-c',
-                        '--codons',
-                        help='A file with codon translations',
+    parser.add_argument('file',
+                        help='Input file(s)',
                         metavar='FILE',
                         type=argparse.FileType('r'),
                         default=None,
-                        required=True)
+                        nargs='+')
 
     parser.add_argument('-o',
-                        '--outfile',
-                        help='Output filename',
+                        '--outdir',
+                        help='Output directory',
                         type=str,
-                        default='out.txt')
+                        default='out')
 
     return parser.parse_args()
 
 
 # --------------------------------------------------
 def main():
-    """Protein time"""
+    """Transcription time"""
 
     args = get_args()
+    outdir = args.outdir
 
-    lookup = {line[:3]: line.strip()[4:] for line in args.codons}
+    if not os.path.isdir(outdir):
+        os.makedirs(outdir)
 
-    #seq = args.DNA.upper()
-    seq_code = [args.DNA.upper()[i:i+3] for i in range(0, len(args.DNA), 3)]
+    num_seq = 0
+    num_file = 0
+    numseq_total = 0
+    for fh in args.file:
+        out_file = os.path.join(outdir, os.path.basename(fh.name))
+        out_fh = open(out_file, 'wt')
+        num_file += 1
+        RNA = []
+        for line in fh:
+            num_seq += 1
+            for char in line:
+                if char is 't':
+                    RNA.append('u')
+                elif char is 'T':
+                    RNA.append('U')
+                else:
+                    RNA.append(char)
 
-    ans = ''
-    for cdn in seq_code:
-        ans += lookup.get(cdn, f'-')
-
-    out_fh = open(args.outfile, 'wt')
-    out_fh.write(ans + '\n')
-    print(f'Output written to "{args.outfile}".')
-    out_fh.close()
+        numseq_total += num_seq
+        seq_s = 'sequence' if num_seq == 1 else 'sequences'
+        file_s = 'file' if num_file == 1 else 'files'
+        out_fh.write(''.join(RNA))
+        print(f'Done, wrote {numseq_total} {seq_s} in {num_file} {file_s} to directory "{outdir}".')
+        out_fh.close()
 
 # --------------------------------------------------
 if __name__ == '__main__':
