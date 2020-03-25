@@ -61,12 +61,12 @@ def main():
                 else:
                     RNA.append(char)
 
-        numseq_total += num_seq
-    out_fh.write(''.join(RNA) + '\n')
+        out_fh.write(''.join(RNA) + '\n')
+        out_fh.close()
+    numseq_total += num_seq
     seq_s = 'sequence' if num_seq == 1 else 'sequences'
     file_s = 'file' if num_file == 1 else 'files'
     print(f'Done, wrote {numseq_total} {seq_s} in {num_file} {file_s} to directory "{outdir}".')
-    out_fh.close()
 
 # --------------------------------------------------
 if __name__ == '__main__':
