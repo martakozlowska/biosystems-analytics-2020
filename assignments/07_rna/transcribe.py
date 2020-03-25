@@ -54,19 +54,19 @@ def main():
         for line in fh:
             num_seq += 1
             for char in line:
-                if char is 't':
+                if char == 't':
                     RNA.append('u')
-                elif char is 'T':
+                elif char == 'T':
                     RNA.append('U')
                 else:
                     RNA.append(char)
 
-        out_fh.write(''.join(RNA))
         numseq_total += num_seq
-        seq_s = 'sequence' if num_seq == 1 else 'sequences'
-        file_s = 'file' if num_file == 1 else 'files'
-        print(f'Done, wrote {numseq_total} {seq_s} in {num_file} {file_s} to directory "{outdir}".')
-        out_fh.close()
+    out_fh.write(''.join(RNA) + '\n')
+    seq_s = 'sequence' if num_seq == 1 else 'sequences'
+    file_s = 'file' if num_file == 1 else 'files'
+    print(f'Done, wrote {numseq_total} {seq_s} in {num_file} {file_s} to directory "{outdir}".')
+    out_fh.close()
 
 # --------------------------------------------------
 if __name__ == '__main__':
