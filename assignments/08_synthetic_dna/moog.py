@@ -8,7 +8,6 @@ Purpose: Moog time synthetic
 import argparse
 import random
 import os
-import sys
 
 
 # --------------------------------------------------
@@ -22,7 +21,7 @@ def get_args():
     parser.add_argument('-o',
                         '--outfile',
                         help='Output filename',
-                        metavar='FILE',
+                        metavar='file',
                         type=argparse.FileType('wt'),
                         default='out.fa')
 
@@ -107,14 +106,14 @@ def main():
     random.seed(args.seed)
     pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
 
-    for n in range(args.number):
+    for num in range(args.number):
         seq_len = random.randint(args.minlen, args.maxlen)
-        seq = random.sample(pool, k = seq_len)
-        #print(f'> {n} \n{"".join(seq)}')
-        args.outfile.write(f'> {n} \n{"".join(seq)}')
+        seq = random.sample(pool, k=seq_len)
+        args.outfile.write(f'> {num} \n{"".join(seq)}\n')
 
-    s = 's' if args.number > 1 else ''
-    print(f'Done, wrote {args.number} {args.seqtype.upper()} sequence{s} to "{args.outfile}".')
+    end = 's' if args.number > 1 else ''
+    file_name = os.path.basename(args.outfile.name)
+    print(f'Done, wrote {args.number} {args.seqtype.upper()} sequence{end} to "{file_name}".')
     args.outfile.close()
 
 
