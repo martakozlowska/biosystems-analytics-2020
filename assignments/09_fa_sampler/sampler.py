@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-Author : Me <me@foo.com>
-Date   : today
-Purpose: Rock the Casbah
+Author : MK
+Date   : 2020.04.07
+Purpose: sample
 """
 
 import argparse
 import os
-import sys
 import random
 from Bio import SeqIO
 
@@ -48,7 +47,12 @@ def get_args():
                         type=str,
                         default='out')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    if not 0 < args.pct < 1:
+        parser.error(f'--pct "{args.pct}" must be between 0 and 1')
+
+    return args
 
 
 # --------------------------------------------------
@@ -62,23 +66,29 @@ def main():
     if not os.path.isdir(out_dir):
         os.makedirs(out_dir)
 
-    num = 0
+    num_files = 0
+    num_seq = 0
+    total_seq = 0
+
     for fh in args.file:
         basename = os.path.basename(fh.name)
         out_file = os.path.join(out_dir, basename)
-        num += 1
-        print(f'{num}: {basename}')
+        num_files += 1
+        print(f'  {num_files}: {basename}')
 
-        """
-        out_fh = 
+        out_fh = open(out_file, 'wt')
         for rec in SeqIO.parse(fh, 'fasta'):
-            if:
-                SeqIO.write(rec, out_fh, 'fasta')
-                
-        out_fh.close()
-        """
 
-    print(f'Wrote sequences from files to directory "basename"')
+            if random.random() <= args.pct:
+                SeqIO.write(rec, out_fh, 'fasta')
+                num_seq += 1
+
+        out_fh.close()
+
+    total_seq += num_seq
+    s = 's' if num_files > 1 else ''
+
+    print(f'Wrote {total_seq:,} sequences from {num_files} file{s} to directory "{out_dir}"')
 
 
 
