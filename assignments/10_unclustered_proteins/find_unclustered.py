@@ -6,9 +6,11 @@ Purpose: Unclustered proteins
 """
 
 import argparse
+import os.path
+
 import re
-import os
-import sys
+from Bio import SeqIO
+
 
 
 # --------------------------------------------------
@@ -50,15 +52,25 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-
     protein_ids = set()
-    for line in args.cdhit:
-        match = re.search(r'>(\d+', line)
-        id = match.group()
-        protein_ids.add(id)
 
     for line in args.cdhit:
-        re.sub(r'\|.*','', line)
+        if line[0] != '>':
+            match = re.search(r'>(\d+)', line)
+            if match is not None:
+                ids = match.group(1)
+                protein_ids.add(ids)
+    n_seq = 0
+    n_write = 0
+    for rec in SeqIO.parse(args.proteins, 'fasta'):
+        prot_id = re.sub(r'\|.*','', rec.id)
+        n_seq += 1
+        if prot_id not in protein_ids:
+            n_write += 1
+            SeqIO.write(rec, args.outfile, 'fasta')
+
+    print(f'Wrote {n_write:,} of {n_seq:,} unclustered proteins to "{args.outfile}"')
+
 
 # --------------------------------------------------
 if __name__ == '__main__':
