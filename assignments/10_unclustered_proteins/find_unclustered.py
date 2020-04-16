@@ -6,6 +6,7 @@ Purpose: Unclustered proteins
 """
 
 import argparse
+import re
 import os
 import sys
 
@@ -22,7 +23,7 @@ def get_args():
                         '--cdhit',
                         help='Output file from CD-HIT (clustered proteins)',
                         metavar='cdhit',
-                        type=str,
+                        type=argparse.FileType('r'),
                         required=True,
                         default=None)
 
@@ -49,8 +50,15 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    print(f'{args.outfile}')
 
+    protein_ids = set()
+    for line in args.cdhit:
+        match = re.search(r'>(\d+', line)
+        id = match.group()
+        protein_ids.add(id)
+
+    for line in args.cdhit:
+        re.sub(r'\|.*','', line)
 
 # --------------------------------------------------
 if __name__ == '__main__':
