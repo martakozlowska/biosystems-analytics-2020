@@ -8,9 +8,9 @@ import string
 from subprocess import getstatusoutput
 
 prg = './gene_ids.py'
-amigo = './amigo_heat.txt'
-tair = './tair_heat.txt'
-repeat = './amigo_repeat'
+amigo = './inputs/amigo_heat.txt'
+tair = './inputs/tair_heat.txt'
+repeat = './inputs/amigo_repeat'
 outfile = 'out.txt'
 #exp_amigo = "\n".join(('AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT1G64280 AT5G12140 AT3G24520 AT3G24500 AT4G19630 AT3G06400 AT1G16030').split())
 exp_tair = "\n".join(('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split())
