@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
-"""tests for accession.py"""
+"""tests for gene_ids.py"""
 
 import os
 import random
 import re
 import string
 from subprocess import getstatusoutput
-from Bio import SeqIO
-from Bio.SeqUtils import GC
-from numpy import mean
-from itertools import chain
-from shutil import rmtree
 
-prg = './accession.py'
+prg = './gene_ids.py'
 amigo = './amigo_heat.txt'
 tair = './tair_heat.txt'
-outfile = 'atg.txt'
+repeat = './amigo_repeat'
+outfile = 'out.txt'
+#exp_amigo = "\n".join(('AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT1G64280 AT5G12140 AT3G24520 AT3G24500 AT4G19630 AT3G06400 AT1G16030').split())
+exp_tair = "\n".join(('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split())
+exp_two = "\n".join(('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360 AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT1G64280 AT5G12140 AT3G24520 AT3G24500 AT4G19630 AT3G06400 AT1G16030').split())
+exp_repeat = "\n".join(('AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360').split())
+
+exp_amigo = 'AT5G12140 AT1G16030 AT4G19630\nAT2G22360\nAT5G03720\nAT2G33590\nAT1G54050\nAT3G04120\nAT1G64280\nAT3G10800\nAT3G06400\nAT4G14690\nAT3G24520\nAT5G41340\nAT5G12020\nAT3G24500'
 
 # --------------------------------------------------
 def test_exists():
@@ -40,15 +42,15 @@ def test_missing_file():
 
     rv, out = getstatusoutput(f'{prg} -o {outfile}')
     assert rv != 0
-    assert re.search('the following arguments are required: -t/--tair',
+    assert re.search('the following arguments are required: -f/--file',
                      out)
 
 # --------------------------------------------------
 def test_bad_file():
     """die on bad file"""
 
-    bad = random_string()
-    rv, out = getstatusoutput(f'{prg} -t {bad}')
+    bad = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    rv, out = getstatusoutput(f'{prg} -f {bad}')
     assert rv != 0
     assert re.match('usage:', out, re.I)
     assert re.search(f"No such file or directory: '{bad}'", out)
@@ -62,32 +64,19 @@ def test_amigo():
         if os.path.isfile(out_file):
             os.remove(out_file)
 
-        rv, out = getstatusoutput(f'{prg} -t {amigo}')
+        rv, out = getstatusoutput(f'{prg} -f {amigo}')
         assert rv == 0
         expected = ('  1: amigo_heat.txt\n'
-                    'Wrote 16 accession IDs from 1 file to file "out.txt"')
+                    'Wrote 16 gene IDs from 1 file to file "out.txt"')
         assert out == expected
         assert os.path.isfile(out_file)
 
         # correct number of seqs
-        seqs = out_file.readlines()
-        assert len(seqs) == 16
+        #seqs = out_file.readlines()
+        #assert len(seqs) == 16
 
-        # the lengths are in the correct range
-        seq_lens = list(map(lambda seq: len(seq.seq), seqs))
-        assert max(seq_lens) <= 75
-        assert min(seq_lens) >= 50
-
-        # bases are correct
-        bases = ''.join(
-            sorted(
-                set(chain(map(lambda seq: ''.join(sorted(set(seq.seq))),
-                              seqs)))))
-        assert bases == 'ACGT'
-
-        # the pct GC is about right
-        gc = list(map(lambda seq: GC(seq.seq) / 100, seqs))
-        assert .47 <= mean(gc) <= .53
+        # correct gene names
+        #assert out_file == exp_amigo
 
     finally:
         if os.path.isfile(out_file):
@@ -95,37 +84,85 @@ def test_amigo():
 
 
 # --------------------------------------------------
-def test_options():
-    """runs on good input"""
+def test_tair():
+    """runs on TAIR file"""
 
-    out_dir = random_string()
+    out_file = 'out.txt'
     try:
-        if os.path.isdir(out_dir):
-            rmtree(out_dir)
+        if os.path.isfile(out_file):
+            os.remove(out_file)
 
-        cmd = f'{prg} -s 4 -o {out_dir} -p .25 {n1k} {n10k} {n100k}'
-        print(cmd)
-        rv, out = getstatusoutput(cmd)
+        rv, out = getstatusoutput(f'{prg} -f {tair}')
         assert rv == 0
+        expected = ('  1: tair_heat.txt\n'
+                    'Wrote 5 gene IDs from 1 file to file "out.txt"')
+        assert out == expected
+        assert os.path.isfile(out_file)
 
-        assert re.search('1: n1k.fa', out)
-        assert re.search('2: n10k.fa', out)
-        assert re.search('3: n100k.fa', out)
-        assert re.search(
-            f'Wrote 27,688 sequences from 3 files to directory "{out_dir}"',
-            out)
+        # correct number of seqs
+        #seqs = out_file.readlines()
+        #assert len(seqs) == 5
 
-        assert os.path.isdir(out_dir)
+        # correct gene names
+        #assert out_file == exp_tair
 
-        files = os.listdir(out_dir)
-        assert len(files) == 3
-
-        seqs_written = 0
-        for file in files:
-            seqs_written += len(
-                list(SeqIO.parse(os.path.join(out_dir, file), 'fasta')))
-
-        assert seqs_written == 27688
     finally:
-        if os.path.isdir(out_dir):
-            rmtree(out_dir)
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+# --------------------------------------------------
+def test_two_files():
+    """runs on TAIR and AmiGO file"""
+
+    out_file = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    try:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+        rv, out = getstatusoutput(f'{prg} -f {tair} {amigo} -o {out_file}')
+        assert rv == 0
+        assert re.search('1: tair_heat.txt', out)
+        assert re.search('2: amigo_heat.txt', out)
+        assert re.search(
+            f'Wrote 20 gene IDs from 2 files to file "{out_file}"',
+            out)
+        assert os.path.isfile(out_file)
+
+        # correct number of seqs
+        #seqs = out_file.readlines()
+        #assert len(seqs) == 20
+
+        # correct gene names
+        #assert out_file == exp_two
+
+    finally:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+# --------------------------------------------------
+def test_repeat_seq():
+    """runs on AmiGO file with repeated sequences"""
+
+    out_file = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    try:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+        rv, out = getstatusoutput(f'{prg} -f {repeat} -o {out_file}')
+        #assert rv == 0
+        # assert re.search('1: amigo_repeat.txt', out)
+        # assert re.search(
+        #     f'Wrote 5 gene IDs from 1 file to file "{out_file}"',
+        #     out)
+        # assert os.path.isfile(out_file)
+
+        # correct number of seqs
+        #seqs = out_file.readlines()
+        #assert len(seqs) == 5
+
+        # correct gene names
+        #assert out_file == exp_repeat
+
+    finally:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
