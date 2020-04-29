@@ -46,22 +46,21 @@ def main():
     out_fh = args.outfile
 
     num_id, num_file, total_id = 0, 0, 0
-    gil = []
+    gil = set()
     for fh in args.file:
         num_file += 1
         filename = os.path.basename(fh.name)
         print(f'{num_file:3}: {filename}')
         for line in fh:
-            gene = re.search(r'AT(\d)G(\d+)', line)
-            if gene is not None:
-                gil.append(gene.group())
+            match = re.search(r'AT(\d)G(\d+)', line)
+            if match is not None:
+                gil.add(match.group())
 
-    sgil = set(gil)
-    out_fh.write("\n".join(sgil)+'\n')
+    out_fh.write("\n".join(gil)+'\n')
 
-    num_id = len(sgil)
+    num_id = len(gil)
 
-    s_num = '' if total_id is 1 else 's'
+    s_num = '' if num_id is 1 else 's'
     s_file = '' if num_file is 1 else 's'
     print(f'Wrote {num_id} gene ID{s_num} from {num_file} file{s_file} to file "{args.outfile.name}"')
 
