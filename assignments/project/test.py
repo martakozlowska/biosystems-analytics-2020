@@ -12,12 +12,10 @@ amigo = './inputs/amigo_heat.txt'
 tair = './inputs/tair_heat.txt'
 repeat = './inputs/amigo_repeat'
 outfile = 'out.txt'
-#exp_amigo = "\n".join(('AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT1G64280 AT5G12140 AT3G24520 AT3G24500 AT4G19630 AT3G06400 AT1G16030').split())
-exp_tair = "\n".join(('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split())
-exp_two = "\n".join(('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360 AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT1G64280 AT5G12140 AT3G24520 AT3G24500 AT4G19630 AT3G06400 AT1G16030').split())
-exp_repeat = "\n".join(('AT5G12020 AT5G41340 AT5G03720 AT4G14690 AT2G22360').split())
-
-exp_amigo = 'AT5G12140 AT1G16030 AT4G19630\nAT2G22360\nAT5G03720\nAT2G33590\nAT1G54050\nAT3G04120\nAT1G64280\nAT3G10800\nAT3G06400\nAT4G14690\nAT3G24520\nAT5G41340\nAT5G12020\nAT3G24500'
+exp_amigo = "\n".join(('AT5G12020 AT3G24520 AT1G16030 AT4G19630 AT1G64280 AT3G06400 AT5G41340 AT2G22360 AT5G12140 AT5G03720 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT3G24500 AT4G14690').split())
+exp_tair = "\n".join('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split()
+exp_two = "\n".join(('AT5G12020 AT3G06400 AT2G33590 AT1G54050 AT5G67030 AT4G14690 AT1G16030 AT5G03720 AT3G10800 AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 AT5G41340 AT3G24520').split())
+exp_repeat = "\n".join(('AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360').split())
 
 # --------------------------------------------------
 def test_exists():
@@ -70,13 +68,7 @@ def test_amigo():
                     'Wrote 16 gene IDs from 1 file to file "out.txt"')
         assert out == expected
         assert os.path.isfile(out_file)
-
-        # correct number of seqs
-        #seqs = out_file.readlines()
-        #assert len(seqs) == 16
-
-        # correct gene names
-        #assert out_file == exp_amigo
+        assert open(out_file).read().strip() == exp_amigo
 
     finally:
         if os.path.isfile(out_file):
@@ -87,7 +79,7 @@ def test_amigo():
 def test_tair():
     """runs on TAIR file"""
 
-    out_file = 'out.txt'
+    out_file = "out.txt"
     try:
         if os.path.isfile(out_file):
             os.remove(out_file)
@@ -98,13 +90,7 @@ def test_tair():
                     'Wrote 5 gene IDs from 1 file to file "out.txt"')
         assert out == expected
         assert os.path.isfile(out_file)
-
-        # correct number of seqs
-        #seqs = out_file.readlines()
-        #assert len(seqs) == 5
-
-        # correct gene names
-        #assert out_file == exp_tair
+        assert open(out_file).read().strip() == print(exp_tair)
 
     finally:
         if os.path.isfile(out_file):
