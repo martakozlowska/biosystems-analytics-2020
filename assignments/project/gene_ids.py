@@ -56,12 +56,12 @@ def main():
             if match is not None:
                 gil.add(match.group())
 
-    out_fh.write("\n".join(gil)+'\n')
+    out_fh.write("\n".join(sorted(gil))+'\n')
 
     num_id = len(gil)
 
-    s_num = '' if num_id is 1 else 's'
-    s_file = '' if num_file is 1 else 's'
+    s_num = '' if num_id == 1 else 's'
+    s_file = '' if num_file == 1 else 's'
     print(f'Wrote {num_id} gene ID{s_num} from {num_file} file{s_file} to file "{args.outfile.name}"')
 
 

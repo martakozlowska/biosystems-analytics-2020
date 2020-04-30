@@ -12,10 +12,14 @@ amigo = './inputs/amigo_heat.txt'
 tair = './inputs/tair_heat.txt'
 repeat = './inputs/amigo_repeat'
 outfile = 'out.txt'
-exp_amigo = "\n".join(('AT5G12020 AT3G24520 AT1G16030 AT4G19630 AT1G64280 AT3G06400 AT5G41340 AT2G22360 AT5G12140 AT5G03720 AT2G33590 AT1G54050 AT3G10800 AT3G04120 AT3G24500 AT4G14690').split())
-exp_tair = "\n".join('AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split()
-exp_two = "\n".join(('AT5G12020 AT3G06400 AT2G33590 AT1G54050 AT5G67030 AT4G14690 AT1G16030 AT5G03720 AT3G10800 AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 AT5G41340 AT3G24520').split())
-exp_repeat = "\n".join(('AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360').split())
+exp_tair = "\n".join(
+    'AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split()
+exp_two = "\n".join((
+    'AT5G12020 AT3G06400 AT2G33590 AT1G54050 AT5G67030 AT4G14690 AT1G16030 AT5G03720 AT3G10800 AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 AT5G41340 AT3G24520'
+).split())
+exp_repeat = "\n".join(
+    ('AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360').split())
+
 
 # --------------------------------------------------
 def test_exists():
@@ -34,14 +38,15 @@ def test_usage():
         assert rv == 0
         assert re.match("usage", out, re.IGNORECASE)
 
+
 # --------------------------------------------------
 def test_missing_file():
     """fails on no input"""
 
     rv, out = getstatusoutput(f'{prg} -o {outfile}')
     assert rv != 0
-    assert re.search('the following arguments are required: -f/--file',
-                     out)
+    assert re.search('the following arguments are required: -f/--file', out)
+
 
 # --------------------------------------------------
 def test_bad_file():
@@ -52,6 +57,7 @@ def test_bad_file():
     assert rv != 0
     assert re.match('usage:', out, re.I)
     assert re.search(f"No such file or directory: '{bad}'", out)
+
 
 # --------------------------------------------------
 def test_amigo():
@@ -68,7 +74,13 @@ def test_amigo():
                     'Wrote 16 gene IDs from 1 file to file "out.txt"')
         assert out == expected
         assert os.path.isfile(out_file)
-        assert open(out_file).read().strip() == exp_amigo
+        exp_amigo = '\n'.join(
+            sorted("""
+            AT5G12020 AT3G24520 AT1G16030 AT4G19630 AT1G64280 AT3G06400
+            AT5G41340 AT2G22360 AT5G12140 AT5G03720 AT2G33590 AT1G54050
+            AT3G10800 AT3G04120 AT3G24500 AT4G14690
+            """.split()))
+        assert open(out_file).read().strip() == exp_amigo.strip()
 
     finally:
         if os.path.isfile(out_file):
@@ -96,11 +108,13 @@ def test_tair():
         if os.path.isfile(out_file):
             os.remove(out_file)
 
+
 # --------------------------------------------------
 def test_two_files():
     """runs on TAIR and AmiGO file"""
 
-    out_file = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    out_file = ''.join(
+        random.choices(string.ascii_uppercase + string.digits, k=5))
     try:
         if os.path.isfile(out_file):
             os.remove(out_file)
@@ -110,8 +124,7 @@ def test_two_files():
         assert re.search('1: tair_heat.txt', out)
         assert re.search('2: amigo_heat.txt', out)
         assert re.search(
-            f'Wrote 20 gene IDs from 2 files to file "{out_file}"',
-            out)
+            f'Wrote 20 gene IDs from 2 files to file "{out_file}"', out)
         assert os.path.isfile(out_file)
 
         # correct number of seqs
@@ -125,11 +138,13 @@ def test_two_files():
         if os.path.isfile(out_file):
             os.remove(out_file)
 
+
 # --------------------------------------------------
 def test_repeat_seq():
     """runs on AmiGO file with repeated sequences"""
 
-    out_file = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+    out_file = ''.join(
+        random.choices(string.ascii_uppercase + string.digits, k=5))
     try:
         if os.path.isfile(out_file):
             os.remove(out_file)
