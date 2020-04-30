@@ -20,7 +20,7 @@ def get_args():
         description='Filter SwissProt file for keywords, taxa',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('FILE',
+    parser.add_argument('file',
                         help='SwissProt file',
                         metavar='FILE',
                         type=argparse.FileType('r'),
@@ -40,7 +40,7 @@ def get_args():
                         help='Taxa to skip',
                         metavar='[taxa [taxa ...]]',
                         type=str,
-                        default=None)
+                        nargs='*')
 
     parser.add_argument('-o',
                         '--outfile',
@@ -59,11 +59,19 @@ def main():
     args = get_args()
     want_key = set(map(str.lower, args.keyword))
     skip_taxa = set(map(str.lower, args.skiptaxa or []))
+    num_take, num_skip = 0, 0
 
-    for rec in SeqIO.parse(args.FILE, "swiss"):
+    for rec in SeqIO.parse(args.file, "swiss"):
         annot = rec.annotations
         keywords = annot.get('keywords')
-        num_take, num_skip = 0, 0
+
+        taxa = annot.get('taxonomy')
+        if taxa:
+            taxa = set(map(str.lower, taxa))
+            if skip_taxa.intersection(taxa):
+                num_skip += 1
+                continue
+
         if keywords:
             keywords = set(map(str.lower, keywords))
             if want_key.intersection(keywords):
@@ -71,13 +79,6 @@ def main():
                 SeqIO.write(rec, args.outfile, 'fasta')
             else:
                 num_skip += 1
-        taxa = annot.get('taxonomy')
-        if taxa:
-            taxa = set(map(str.lower, taxa))
-            if skip_taxa.intersection(taxa):
-                num_skip += 1
-                continue
-        break
 
 
     print(f'Done, skipped {num_skip} and took {num_take}. See output in "{args.outfile.name}"')
