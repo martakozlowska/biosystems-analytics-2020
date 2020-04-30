@@ -81,7 +81,7 @@ def main():
                 num_skip += 1
 
 
-    print(f'Done, skipped {num_skip} and took {num_take}. See output in "{args.outfile.name}"')
+    print(f'Done, skipped {num_skip} and took {num_take}. See output in "{args.outfile.name}".')
 
 
 # --------------------------------------------------
