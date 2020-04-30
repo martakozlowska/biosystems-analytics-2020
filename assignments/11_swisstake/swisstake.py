@@ -57,7 +57,6 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    #want_key = set([key.lower() for key in args.keyword)
     want_key = set(map(str.lower, args.keyword))
     skip_taxa = set(map(str.lower, args.skiptaxa or []))
 
@@ -70,6 +69,8 @@ def main():
             if want_key.intersection(keywords):
                 num_take += 1
                 SeqIO.write(rec, args.outfile, 'fasta')
+            else:
+                num_skip += 1
         taxa = annot.get('taxonomy')
         if taxa:
             taxa = set(map(str.lower, taxa))
