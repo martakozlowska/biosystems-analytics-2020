@@ -52,8 +52,8 @@ def main():
         filename = os.path.basename(fh.name)
         print(f'{num_file:3}: {filename}')
         for line in fh:
-            match = re.search(r'AT(\d)G(\d+)', line)
-            if match is not None:
+            match = re.findall(r'AT(\d)G(\d+)', line)
+            if match:
                 gil.add(match.group())
 
     out_fh.write("\n".join(sorted(gil))+'\n')

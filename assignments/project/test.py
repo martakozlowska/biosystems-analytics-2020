@@ -102,7 +102,11 @@ def test_tair():
                     'Wrote 5 gene IDs from 1 file to file "out.txt"')
         assert out == expected
         assert os.path.isfile(out_file)
-        assert open(out_file).read().strip() == print(exp_tair)
+        exp_tair = '\n'.join(
+            sorted("""
+                    AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360
+                    """.split()))
+        assert open(out_file).read().strip() == exp_tair.strip()
 
     finally:
         if os.path.isfile(out_file):
@@ -126,13 +130,13 @@ def test_two_files():
         assert re.search(
             f'Wrote 20 gene IDs from 2 files to file "{out_file}"', out)
         assert os.path.isfile(out_file)
-
-        # correct number of seqs
-        #seqs = out_file.readlines()
-        #assert len(seqs) == 20
-
-        # correct gene names
-        #assert out_file == exp_two
+        exp_two = '\n'.join(
+            sorted("""
+                    AT5G12020 AT3G06400 AT2G33590 AT1G54050 AT5G67030 AT4G14690 AT1G16030 AT5G03720 AT3G10800 
+                    AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 
+                    AT5G41340 AT3G24520
+                    """.split()))
+        assert open(out_file).read().strip() == exp_tair.strip()
 
     finally:
         if os.path.isfile(out_file):
@@ -143,26 +147,22 @@ def test_two_files():
 def test_repeat_seq():
     """runs on AmiGO file with repeated sequences"""
 
-    out_file = ''.join(
-        random.choices(string.ascii_uppercase + string.digits, k=5))
+    out_file = "out.txt"
     try:
         if os.path.isfile(out_file):
             os.remove(out_file)
 
-        rv, out = getstatusoutput(f'{prg} -f {repeat} -o {out_file}')
-        #assert rv == 0
-        # assert re.search('1: amigo_repeat.txt', out)
-        # assert re.search(
-        #     f'Wrote 5 gene IDs from 1 file to file "{out_file}"',
-        #     out)
-        # assert os.path.isfile(out_file)
-
-        # correct number of seqs
-        #seqs = out_file.readlines()
-        #assert len(seqs) == 5
-
-        # correct gene names
-        #assert out_file == exp_repeat
+        rv, out = getstatusoutput(f'{prg} -f {repeat}')
+        assert rv == 0
+        expected = ('  1: amigo_repeat.txt\n'
+                    'Wrote 5 gene IDs from 1 file to file "out.txt"')
+        assert out == expected
+        assert os.path.isfile(out_file)
+        exp_repeat = '\n'.join(
+            sorted("""
+                    AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360
+                    """.split()))
+        assert open(out_file).read().strip() == exp_repeat.strip()
 
     finally:
         if os.path.isfile(out_file):
