@@ -57,16 +57,29 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
+    #want_key = set([key.lower() for key in args.keyword)
+    want_key = set(map(str.lower, args.keyword))
+    skip_taxa = set(map(str.lower, args.skiptaxa or []))
 
-    for rec in SeqIO.parse(args.file, "swiss"):
-        print(rec)
-        taxa = set(map(str.lower, args.file))
-        skip = set(map(str.lower, args.skiptaxa))
-        if skip.intersection(taxa):
-            pass
-        if
+    for rec in SeqIO.parse(args.FILE, "swiss"):
+        annot = rec.annotations
+        keywords = annot.get('keywords')
+        num_take, num_skip = 0, 0
+        if keywords:
+            keywords = set(map(str.lower, keywords))
+            if want_key.intersection(keywords):
+                num_take += 1
+                SeqIO.write(rec, args.outfile, 'fasta')
+        taxa = annot.get('taxonomy')
+        if taxa:
+            taxa = set(map(str.lower, taxa))
+            if skip_taxa.intersection(taxa):
+                num_skip += 1
+                continue
+        break
 
-    print(f'Done, skipped {} and took {}. See output in "{args.outfile.name}')
+
+    print(f'Done, skipped {num_skip} and took {num_take}. See output in "{args.outfile.name}"')
 
 
 # --------------------------------------------------
