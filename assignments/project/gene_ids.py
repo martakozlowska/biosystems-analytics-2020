@@ -8,7 +8,6 @@ Purpose: Find TAIR locus ID
 import argparse
 import re
 import os
-import sys
 
 
 # --------------------------------------------------
@@ -45,7 +44,7 @@ def main():
     args = get_args()
     out_fh = args.outfile
 
-    num_id, num_file, total_id = 0, 0, 0
+    num_id, num_file = 0, 0
     gil = set()
     for fh in args.file:
         num_file += 1
@@ -62,7 +61,8 @@ def main():
 
     s_num = '' if num_id == 1 else 's'
     s_file = '' if num_file == 1 else 's'
-    print(f'Wrote {num_id} gene ID{s_num} from {num_file} file{s_file} to file "{args.outfile.name}"')
+    print(f'Wrote {num_id} gene ID{s_num} from {num_file} '
+          f'file{s_file} to file "{args.outfile.name}"')
 
 
 # --------------------------------------------------
