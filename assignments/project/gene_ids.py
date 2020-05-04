@@ -56,7 +56,6 @@ def main():
             if match:
                 gil.add(match.group())
 
-    #print(gil)
     out_fh.write("\n".join(sorted(gil))+'\n')
 
     num_id = len(gil)

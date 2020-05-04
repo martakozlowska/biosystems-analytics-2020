@@ -10,16 +10,14 @@ from subprocess import getstatusoutput
 prg = './gene_ids.py'
 amigo = './inputs/amigo_heat.txt'
 tair = './inputs/tair_heat.txt'
-repeat = './inputs/amigo_repeat'
+repeat = './inputs/amigo_repeat.txt'
 outfile = 'out.txt'
-exp_tair = "\n".join(
-    'AT5G67030 AT1G13930 AT3G09440 AT1G16540 AT2G22360').split()
-exp_two = "\n".join((
-    'AT5G12020 AT3G06400 AT2G33590 AT1G54050 AT5G67030 AT4G14690 AT1G16030 AT5G03720 AT3G10800 AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 AT5G41340 AT3G24520'
-).split())
-exp_repeat = "\n".join(
-    ('AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360').split())
 
+# --------------------------------------------------
+def random_string():
+    """generate a random string"""
+
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
 # --------------------------------------------------
 def test_exists():
@@ -136,7 +134,7 @@ def test_two_files():
                     AT5G12140 AT1G64280 AT3G24500 AT3G09440 AT3G04120 AT4G19630 AT1G16540 AT2G22360 AT1G13930 
                     AT5G41340 AT3G24520
                     """.split()))
-        assert open(out_file).read().strip() == exp_tair.strip()
+        assert open(out_file).read().strip() == exp_two.strip()
 
     finally:
         if os.path.isfile(out_file):
@@ -156,6 +154,56 @@ def test_repeat_seq():
         assert rv == 0
         expected = ('  1: amigo_repeat.txt\n'
                     'Wrote 5 gene IDs from 1 file to file "out.txt"')
+        assert out == expected
+        assert os.path.isfile(out_file)
+        exp_repeat = '\n'.join(
+            sorted("""
+                    AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360
+                    """.split()))
+        assert open(out_file).read().strip() == exp_repeat.strip()
+
+    finally:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+# --------------------------------------------------
+def test_repeat_seq():
+    """runs on AmiGO file with repeated sequences"""
+
+    out_file = "out.txt"
+    try:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+        rv, out = getstatusoutput(f'{prg} -f {repeat}')
+        assert rv == 0
+        expected = ('  1: amigo_repeat.txt\n'
+                    'Wrote 5 gene IDs from 1 file to file "out.txt"')
+        assert out == expected
+        assert os.path.isfile(out_file)
+        exp_repeat = '\n'.join(
+            sorted("""
+                    AT4G14690 AT5G41340 AT5G03720 AT5G12020 AT2G22360
+                    """.split()))
+        assert open(out_file).read().strip() == exp_repeat.strip()
+
+    finally:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+# --------------------------------------------------
+def test_outfile():
+    """runs with outfile argument"""
+
+    out_file = random_string() + '.txt'
+    try:
+        if os.path.isfile(out_file):
+            os.remove(out_file)
+
+        rv, out = getstatusoutput(f'{prg} -f {repeat} -o {out_file}')
+        assert rv == 0
+        expected = (f'  1: amigo_repeat.txt\n'
+                    f'Wrote 5 gene IDs from 1 file to file "{out_file}"')
         assert out == expected
         assert os.path.isfile(out_file)
         exp_repeat = '\n'.join(
