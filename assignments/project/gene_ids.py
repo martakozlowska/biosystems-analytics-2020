@@ -52,14 +52,11 @@ def main():
         filename = os.path.basename(fh.name)
         print(f'{num_file:3}: {filename}')
         for line in fh:
-            for gene in re.findall(r'(AT\dG\d+)', line):
-                gil.add(gene)
+            match = re.search(r'AT(\d)G(\d+)', line)
+            if match:
+                gil.add(match.group())
 
-            # match = re.findall(r'AT(\d)G(\d+)', line)
-            # if match:
-            #     gil.add(match.group())
-
-    print(gil)
+    #print(gil)
     out_fh.write("\n".join(sorted(gil))+'\n')
 
     num_id = len(gil)
