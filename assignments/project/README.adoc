@@ -144,19 +144,21 @@ The output file should:
 A passing test suite should look like this:
 
 ----
-$ pytest -xv test.py
-============================== test session starts =================================
+$ make test
+pytest -xv test.py
+=============================== test session starts ================================
 ...
-collected 8 items
+collected 9 items
 
-test.py::test_exists PASSED                                                   [ 12%]
-test.py::test_usage PASSED                                                    [ 25%]
-test.py::test_missing_file PASSED                                             [ 37%]
-test.py::test_bad_file PASSED                                                 [ 50%]
-test.py::test_amigo PASSED                                                    [ 62%]
-test.py::test_tair PASSED                                                     [ 75%]
-test.py::test_two_files PASSED                                                [ 87%]
-test.py::test_repeat_seq PASSED                                               [100%]
+test.py::test_exists PASSED                                                                                                                                               [ 11%]
+test.py::test_usage PASSED                                                                                                                                                [ 22%]
+test.py::test_missing_file PASSED                                                                                                                                         [ 33%]
+test.py::test_bad_file PASSED                                                                                                                                             [ 44%]
+test.py::test_amigo PASSED                                                                                                                                                [ 55%]
+test.py::test_tair PASSED                                                                                                                                                 [ 66%]
+test.py::test_two_files PASSED                                                                                                                                            [ 77%]
+test.py::test_repeat_seq PASSED                                                                                                                                           [ 88%]
+test.py::test_outfile PASSED                                                                                                                                              [100%]
 
-=============================== 8 passed in 0.51s ==================================
+=============================== 9 passed in 0.61s ===================================
 ----
