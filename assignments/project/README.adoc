@@ -87,7 +87,7 @@ I can also run the program on both of my convoluted files and get back a beautif
 $ ./gene_ids.py -f tair_heat.txt amigo_heat.txt
   1: tair_heat.txt
   2: amigo_heat.txt
-Wrote 21 gene IDs from 2 files to file "out.txt"
+Wrote 20 gene IDs from 2 files to file "out.txt"
 
 $ cat out.txt
 AT3G24500
