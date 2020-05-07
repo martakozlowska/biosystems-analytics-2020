@@ -52,7 +52,7 @@ def get_args():
 
     parser.add_argument('-d',
                         '--delimiter',
-                        help='Input file',
+                        help='Delimiter',
                         metavar='delim',
                         type=str,
                         default=',')
@@ -65,20 +65,23 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
+
+
     reader = csv.DictReader(args.file, delimiter=args.delimiter)
 
-    for row in reader:
-        for column, value in row.items():
-            if value is None or value == "":
-                parser.error(f'--col "{args.col}" not a valid column!')
+    # for row in reader:
+    #     for column, value in row.items():
+    #         if value is None or value == "":
+    #             parser.error(f'--col "{args.col}" not a valid column!')
 
     writer = csv.DictWriter(args.outfile, fieldnames=reader.fieldnames)
     writer.writeheader()
 
-    for rec in reader
-        if re.search(search_for, text, re.IGNORECASE)
-            writer
+    for rec in reader:
         print(rec)
+        if re.search(args.val, args.col, re.IGNORECASE):
+            print(next(reader))
+            writer.writerow()
         break
 
 
