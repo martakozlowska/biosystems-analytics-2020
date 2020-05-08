@@ -57,7 +57,12 @@ def get_args():
                         type=str,
                         default=',')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    # if
+    #     parser.error(f'')
+
+    return args
 
 
 # --------------------------------------------------
@@ -82,7 +87,6 @@ def main():
         if re.search(args.val, args.col, re.IGNORECASE):
             print(next(reader))
             writer.writerow()
-        break
 
 
 
