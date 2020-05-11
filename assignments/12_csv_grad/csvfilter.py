@@ -71,27 +71,31 @@ def main():
 
     args = get_args()
 
-
     reader = csv.DictReader(args.file, delimiter=args.delimiter)
 
-    # for row in reader:
-    #     for column, value in row.items():
-    #         if value is None or value == "":
-    #             parser.error(f'--col "{args.col}" not a valid column!')
+    if args.col:
+        if args.col in reader.fieldnames:
+            pass
+        else:
+            die(f'--col "{args.col}" not a valid column!')
 
     writer = csv.DictWriter(args.outfile, fieldnames=reader.fieldnames)
     writer.writeheader()
 
+    num_write = 0
     for rec in reader:
-        print(rec)
-        if re.search(args.val, args.col, re.IGNORECASE):
-            print(next(reader))
-            writer.writerow()
+        text = str(rec.get(args.col)) if args.col else str(rec)
+        if re.search(args.val, text, re.IGNORECASE):
+            writer.writerow(rec)
+            num_write += 1
 
+    print(f'Done, wrote {num_write} to "{args.outfile.name}".')
 
-
-
-
+# --------------------------------------------------
+def die(msg):
+    """Print message to STDERR and exit with an error"""
+    print(msg, file=sys.stderr)
+    sys.exit(1)
 
 # --------------------------------------------------
 if __name__ == '__main__':
